@@ -118,6 +118,7 @@ int main(int argc, char *argv[]) {
 
 		//start sequence
 		} else if (strcmp(argv[1], "start") == 0) {
+			bcm2835_delay(5000);
 			bcm2835_gpio_write(PIN1, HIGH);
 			bcm2835_gpio_write(PIN2, HIGH);
 			bcm2835_gpio_write(PIN3, HIGH);

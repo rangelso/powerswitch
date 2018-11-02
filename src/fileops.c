@@ -47,7 +47,7 @@ FunctionResult saveGPIOstate(unsigned char GPIOstate){
     if(fp == NULL){
     	return FUNRES_NOK;
     }
-    fprintf(fp,"%d",GPIOstate);
+    fwrite(&GPIOstate,1,1,fp);
     fclose(fp);
     return FUNRES_OK;
 }
