@@ -6,27 +6,32 @@
 	 <?php
 	ini_set('error_reporting',E_ALL);
 	ini_set('display_errors',1);
-	//define("GPIO_STATE_FILE_PATH", "/var/www/html/gpiostate");
-	//define("GPIO_APP_FILE_PATH", "/var/www/html/power-switch-x4");
+	define('GPIO_STATE_FILE_PATH', '/var/www/html/gpiostate');
+	define('GPIO_APP_FILE_PATH', '/var/www/html/power-switch-x4');
+	define('GPIO_ON_COMMAND', 'turnon');
+	define('GPIO_OFF_COMMAND', 'turnoff');
 	print "<center>";
 	if(isset($_GET['action'])){
 		if ($_GET['action']=="turnon1") {
-			system("/var/www/html/test-rasp1 turnon1");
-			//echo exec("test-rasp1 turnon");
+			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1");
 		} else if ($_GET['action']=="turnoff1") {
-			system("/var/www/html/test-rasp1 turnoff1");
+			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1");
 		} else if ($_GET['action']=="turnon2") {
-			system("/var/www/html/test-rasp1 turnon2");
+			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."2");
 		} else if ($_GET['action']=="turnoff2") {
-			system("/var/www/html/test-rasp1 turnoff2");
-		} if ($_GET['action']=="turnon3") {
-			system("/var/www/html/test-rasp1 turnon3");
+			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."2");
+		} else if ($_GET['action']=="turnon3") {
+			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."3");
 		} else if ($_GET['action']=="turnoff3") {
-			system("/var/www/html/test-rasp1 turnoff3");
-		} if ($_GET['action']=="turnon4") {
-			system("/var/www/html/test-rasp1 turnon4");
+			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."3");
+		} else if ($_GET['action']=="turnon4") {
+			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."4");
 		} else if ($_GET['action']=="turnoff4") {
-			system("/var/www/html/test-rasp1 turnoff4");
+			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."4");
+		} else if ($_GET['action']=="turnonall") {
+			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."all");
+		} else if ($_GET['action']=="turnoffall") {
+			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."all");
 		}
 	} else {
 		print ("Dioda gotowa");
@@ -61,8 +66,9 @@
 			</td> 
 		</tr>
 		<tr>
-			<td height = 30 colspan=2>
-			&nbsp;
+			<td align=center height = 30 colspan=2>
+				<a href = index.php?action=turnonall>Włącz wszystkie</a><br><br>
+				<a href = index.php?action=turnoffall>Wyłącz wszystkie</a>
 	 		</td>
 		</tr>
 	 </table>

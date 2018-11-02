@@ -45,8 +45,10 @@ FunctionResult saveGPIOstate(unsigned char GPIOstate){
 
     fp = fopen(GPIO_STATE_FILE_PATH,"wb");
     if(fp == NULL){
+    	fclose(fp);
     	return FUNRES_NOK;
     }
+    //fprintf(fp,"%d",GPIOstate);
     fwrite(&GPIOstate,1,1,fp);
     fclose(fp);
     return FUNRES_OK;
