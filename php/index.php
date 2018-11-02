@@ -6,7 +6,8 @@
 	 <?php
 	ini_set('error_reporting',E_ALL);
 	ini_set('display_errors',1);
-
+	//define("GPIO_STATE_FILE_PATH", "/var/www/html/gpiostate");
+	//define("GPIO_APP_FILE_PATH", "/var/www/html/power-switch-x4");
 	print "<center>";
 	if(isset($_GET['action'])){
 		if ($_GET['action']=="turnon1") {
