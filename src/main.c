@@ -19,79 +19,139 @@
 #include <bcm2835.h>
 #include <stdio.h>
 #include <string.h>
+#include "fileops.h"
 
 #define PIN1 RPI_V2_GPIO_P1_07 //GPIO4
 #define PIN2 RPI_V2_GPIO_P1_15 //GPIO22
 #define PIN3 RPI_V2_GPIO_P1_29 //GPIO5
 #define PIN4 RPI_V2_GPIO_P1_37 //GPIO26
 
-int main(int argc, char *argv[])
-{
-    // If you call this, it will not actually access the GPIO
-    // Use for testing
+#define PIN1_BIT (1)
+#define PIN2_BIT (2)
+#define PIN3_BIT (3)
+#define PIN4_BIT (4)
+
+static void lcl_setBit(unsigned char *byte, int bit){
+	(*byte) |= (1 << (bit-1));
+}
+
+static void lcl_clearBit(unsigned char *byte, int bit){
+	(*byte) &= ~(1 << (bit-1));
+}
+
+int main(int argc, char *argv[]) {
+	// If you call this, it will not actually access the GPIO
+	// Use for testing
 //    bcm2835_set_debug(1);
 
+	unsigned char GPIOstate = 0;
+
 	int res = bcm2835_init();
-    if (res < 0){
-      printf("bcm2835_init error = %d\n",res);
-      return -1;
-    }
+	if (res < 0) {
+		printf("bcm2835_init error = %d\n", res);
+		return -1;
+	}
 
-    // Set the pin to be an output
-    bcm2835_gpio_fsel(PIN1, BCM2835_GPIO_FSEL_OUTP);
-    bcm2835_gpio_fsel(PIN2, BCM2835_GPIO_FSEL_OUTP);
-    bcm2835_gpio_fsel(PIN3, BCM2835_GPIO_FSEL_OUTP);
-    bcm2835_gpio_fsel(PIN4, BCM2835_GPIO_FSEL_OUTP);
+	// Set the pin to be an output
+	bcm2835_gpio_fsel(PIN1, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(PIN2, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(PIN3, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(PIN4, BCM2835_GPIO_FSEL_OUTP);
 
-    if (argc>1){
-    	if (strcmp(argv[1],"turnon1")==0) {
-    		bcm2835_gpio_write(PIN1, HIGH);
-    	} else if (strcmp(argv[1],"turnoff1")==0){
-    		bcm2835_gpio_write(PIN1, LOW);
+	if (argc > 1) {
+		//channel 1
+		if (strcmp(argv[1], "turnon1") == 0) {
+			bcm2835_gpio_write(PIN1, HIGH);
+			lcl_setBit(&GPIOstate,PIN1_BIT);
 
-    	} else if (strcmp(argv[1],"turnon2")==0) {
-    		bcm2835_gpio_write(PIN2, HIGH);
-    	} else if (strcmp(argv[1],"turnoff2")==0){
-    		bcm2835_gpio_write(PIN2, LOW);
+		} else if (strcmp(argv[1], "turnoff1") == 0) {
+			bcm2835_gpio_write(PIN1, LOW);
+			lcl_clearBit(&GPIOstate,PIN1_BIT);
 
-    	} else if (strcmp(argv[1],"turnon3")==0) {
-    	    bcm2835_gpio_write(PIN3, HIGH);
-       	} else if (strcmp(argv[1],"turnoff3")==0){
-       		bcm2835_gpio_write(PIN3, LOW);
+		//channel 2
+		} else if (strcmp(argv[1], "turnon2") == 0) {
+			bcm2835_gpio_write(PIN2, HIGH);
+			lcl_setBit(&GPIOstate,PIN2_BIT);
 
-    	} else if (strcmp(argv[1],"turnon4")==0) {
-        	bcm2835_gpio_write(PIN4, HIGH);
-        } else if (strcmp(argv[1],"turnoff4")==0){
-        	bcm2835_gpio_write(PIN4, LOW);
+		} else if (strcmp(argv[1], "turnoff2") == 0) {
+			bcm2835_gpio_write(PIN2, LOW);
+			lcl_clearBit(&GPIOstate,PIN2_BIT);
 
-    	} else {
-    		printf("Trying to run with wrong command = [%s]\n",argv[1]);
-    		return -1;
-    	}
-    	printf("[%s] command sucessfully performed\n",argv[1]);
+		//channel 3
+		} else if (strcmp(argv[1], "turnon3") == 0) {
+			bcm2835_gpio_write(PIN3, HIGH);
+			lcl_setBit(&GPIOstate,PIN3_BIT);
 
-    } else {
-    	printf("Function was called without args\n");
-    	return -1;
-    }
-    /*
-    // Blink
-    while (1)
-    {
-	// Turn it on
-	bcm2835_gpio_write(PIN, HIGH);
+		} else if (strcmp(argv[1], "turnoff3") == 0) {
+			bcm2835_gpio_write(PIN3, LOW);
+			lcl_clearBit(&GPIOstate,PIN3_BIT);
 
-	// wait a bit
-	bcm2835_delay(500);
+		//channel 4
+		} else if (strcmp(argv[1], "turnon4") == 0) {
+			bcm2835_gpio_write(PIN4, HIGH);
+			lcl_setBit(&GPIOstate,PIN4_BIT);
 
-	// turn it off
-	bcm2835_gpio_write(PIN, LOW);
+		} else if (strcmp(argv[1], "turnoff4") == 0) {
+			bcm2835_gpio_write(PIN4, LOW);
+			lcl_clearBit(&GPIOstate,PIN4_BIT);
 
-	// wait a bit
-	bcm2835_delay(500);
-    }
-    bcm2835_close();
-    */
-    return 0;
+		//channel 1-4
+		} else if (strcmp(argv[1], "turnonall") == 0) {
+			bcm2835_gpio_write(PIN1, HIGH);
+			bcm2835_gpio_write(PIN2, HIGH);
+			bcm2835_gpio_write(PIN3, HIGH);
+			bcm2835_gpio_write(PIN4, HIGH);
+			lcl_setBit(&GPIOstate,PIN1_BIT);
+			lcl_setBit(&GPIOstate,PIN2_BIT);
+			lcl_setBit(&GPIOstate,PIN3_BIT);
+			lcl_setBit(&GPIOstate,PIN4_BIT);
+
+		} else if (strcmp(argv[1], "turnoffall") == 0) {
+			bcm2835_gpio_write(PIN1, LOW);
+			bcm2835_gpio_write(PIN2, LOW);
+			bcm2835_gpio_write(PIN3, LOW);
+			bcm2835_gpio_write(PIN4, LOW);
+			lcl_clearBit(&GPIOstate,PIN1_BIT);
+			lcl_clearBit(&GPIOstate,PIN2_BIT);
+			lcl_clearBit(&GPIOstate,PIN3_BIT);
+			lcl_clearBit(&GPIOstate,PIN4_BIT);
+
+		//start sequence
+		} else if (strcmp(argv[1], "start") == 0) {
+			bcm2835_gpio_write(PIN1, HIGH);
+			bcm2835_gpio_write(PIN2, HIGH);
+			bcm2835_gpio_write(PIN3, HIGH);
+			bcm2835_gpio_write(PIN4, HIGH);
+			lcl_setBit(&GPIOstate,PIN1_BIT);
+			lcl_setBit(&GPIOstate,PIN2_BIT);
+			lcl_setBit(&GPIOstate,PIN3_BIT);
+			lcl_setBit(&GPIOstate,PIN4_BIT);
+
+		} else {
+			printf("Trying to run with wrong command = [%s]\n", argv[1]);
+			return -1;
+		}
+
+		if (saveGPIOstate(GPIOstate) == FUNRES_NOK) {
+			printf("Saving GPIO state failed");
+			return -1;
+		}
+
+		printf("[%s] command sucessfully performed\n", argv[1]);
+
+	} else {
+		printf("Function was called without args\n");
+		return -1;
+	}
+
+	/*
+	 // wait a bit
+	 bcm2835_delay(500);
+	 }
+	 */
+
+	bcm2835_close();
+
+	return 0;
 }
 
