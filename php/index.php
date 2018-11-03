@@ -4,12 +4,17 @@
  </head>
  <body>
 	 <?php
+	 
 	ini_set('error_reporting',E_ALL);
 	ini_set('display_errors',1);
+	define('PHP_PATH', '/var/www/html/php/');
 	define('GPIO_STATE_FILE_PATH', '/var/www/html/gpiostate');
+	define('GPIO_STATE_FILE_SIZE', 1);
 	define('GPIO_APP_FILE_PATH', '/var/www/html/power-switch-x4');
 	define('GPIO_ON_COMMAND', 'turnon');
 	define('GPIO_OFF_COMMAND', 'turnoff');
+	require(PHP_PATH.'functions.php'); 
+	
 	print "<center>";
 	if(isset($_GET['action'])){
 		if ($_GET['action']=="turnon1") {
@@ -36,7 +41,12 @@
 	} else {
 		print ("Dioda gotowa");
 	}
-	print "</center>";    
+	print "</center>";
+	
+	$stateByte = getGPIOstate();
+	print "stateByte from bindec = ".bindec($stateByte)."<br>";  
+	print "stateByte from bin2hex = ".bin2hex($stateByte)."<br>";  
+	    
 	?>
 	 
 	 <table border = 0 cellspacing = 0 cellpadding = 0 width = 100%>
