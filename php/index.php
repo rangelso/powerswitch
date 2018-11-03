@@ -13,6 +13,11 @@
 	define('GPIO_APP_FILE_PATH', '/var/www/html/power-switch-x4');
 	define('GPIO_ON_COMMAND', 'turnon');
 	define('GPIO_OFF_COMMAND', 'turnoff');
+	define ('PIN1_BIT',1);
+	define ('PIN2_BIT',2);
+	define ('PIN3_BIT',3);
+	define ('PIN4_BIT',4);
+	
 	require(PHP_PATH.'functions.php'); 
 	
 	print "<center>";
@@ -44,8 +49,29 @@
 	print "</center>";
 	
 	$stateByte = getGPIOstate();
-	print "stateByte from bindec = ".bindec($stateByte)."<br>";  
-	print "stateByte from bin2hex = ".bin2hex($stateByte)."<br>";  
+	print "stateByte = 0x".bin2hex($stateByte)."<br>";
+	$stateByteDec = hexdec(bin2hex($stateByte));  
+	//PIN1 info
+	if (checkIfBitSet($stateByteDec,PIN1_BIT))
+		print "1 is ON<br>";
+	else 
+		print "1 is OFF<br>";
+	//PIN2 info
+	if (checkIfBitSet($stateByteDec,PIN2_BIT))
+		print "2 is ON<br>";
+	else 
+		print "2 is OFF<br>";
+	//PIN3 info
+	if (checkIfBitSet($stateByteDec,PIN3_BIT))
+		print "3 is ON<br>";
+	else 
+		print "3 is OFF<br>";
+	//PIN4 info
+	if (checkIfBitSet($stateByteDec,PIN4_BIT))
+		print "4 is ON<br>";
+	else 
+		print "4 is OFF<br>";
+	    
 	    
 	?>
 	 
