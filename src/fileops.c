@@ -23,6 +23,36 @@ static long int lcl_checkFileSize(FILE *fp) {
 }
 */
 
+FunctionResult loadGPIOstate(unsigned char *GPIOstate){
+
+	//FunctionResult fRes = FUNRES_NOK;
+    FILE *fp;
+    /*
+    fp = open(GPIO_STATE_FILE_PATH, O_CREAT | O_WRONLY | O_EXCL, S_IRUSR | S_IWUSR);
+    if (fp < 0) {
+      // failure
+      if (errno == EEXIST) {
+        // the file already existed
+        if (lcl_checkFileSize(fp) != GPIO_STATE_FILE_SIZE){
+        	return FUNRES_NOK;
+        }
+      }
+    } else {
+      // now you can use the file
+    }
+    */
+
+    fp = fopen(GPIO_STATE_FILE_PATH,"rb");
+    if(fp == NULL){
+    	fclose(fp);
+    	return FUNRES_NOK;
+    }
+    fread(GPIOstate,1,1,fp);
+    fclose(fp);
+    return FUNRES_OK;
+}
+
+
 FunctionResult saveGPIOstate(unsigned char GPIOstate){
 
 	//FunctionResult fRes = FUNRES_NOK;

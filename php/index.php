@@ -3,8 +3,8 @@
   <title>Test diody</title>
  </head>
  <body>
-	 <?php
-	 
+	<?php
+	
 	ini_set('error_reporting',E_ALL);
 	ini_set('display_errors',1);
 	define('PHP_PATH', '/var/www/html/php/');
@@ -17,40 +17,73 @@
 	define ('PIN2_BIT',2);
 	define ('PIN3_BIT',3);
 	define ('PIN4_BIT',4);
-	
+	define ('CHANNEL1_LABEL','PC');
+	define ('CHANNEL2_LABEL','TV');
+	define ('CHANNEL3_LABEL','');
+	define ('CHANNEL4_LABEL','LAMPA');
+	define ('ALL_ON_LABEL','Włącz<br>wszystkie');
+	define ('ALL_OFF_LABEL','Wyłącz<br>wszystkie');
+	define ('RESTART_LABEL','Zrestartuj<br>listwę');
+	define ('REFRESH_LABEL','Odświerz<br>interfejs');
+	define ('CELL_HEIGHT',100);	
+		
+		
 	require(PHP_PATH.'functions.php'); 
+	$isrestart = 0;
+	$isaction = 0;
+		
+	do {
+		print "<center>";
+		print "<table border = 1 cellspacing = 10 cellpadding = 10 width = 600>";
+		print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." colspan=2>";
+						
+		if(isset($_GET['action'])){
+			$isaction = 1;
+			if ($_GET['action']=="turnon1") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1");
+			} else if ($_GET['action']=="turnoff1") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1");
+			} else if ($_GET['action']=="turnon2") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."2");
+			} else if ($_GET['action']=="turnoff2") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."2");
+			} else if ($_GET['action']=="turnon3") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."3");
+			} else if ($_GET['action']=="turnoff3") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."3");
+			} else if ($_GET['action']=="turnon4") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."4");
+			} else if ($_GET['action']=="turnoff4") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."4");
+			} else if ($_GET['action']=="turnonall") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."all");
+			} else if ($_GET['action']=="turnoffall") {
+				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."all");
+			} else if ($_GET['action']=="restart") {
+				$shutdown = shell_exec('shutdown -r now');
+				print $shutdown;
+				$isrestart = 1;
+			}
+		} 
 	
-	print "<center>";
-	if(isset($_GET['action'])){
-		if ($_GET['action']=="turnon1") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1");
-		} else if ($_GET['action']=="turnoff1") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1");
-		} else if ($_GET['action']=="turnon2") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."2");
-		} else if ($_GET['action']=="turnoff2") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."2");
-		} else if ($_GET['action']=="turnon3") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."3");
-		} else if ($_GET['action']=="turnoff3") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."3");
-		} else if ($_GET['action']=="turnon4") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."4");
-		} else if ($_GET['action']=="turnoff4") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."4");
-		} else if ($_GET['action']=="turnonall") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."all");
-		} else if ($_GET['action']=="turnoffall") {
-			system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."all");
-		}
-	} else {
-		print ("Dioda gotowa");
+		
+	if ($isrestart) {
+		print ("Odczekaj minutę a następnie odświerz <br>interfejs klikając w poniższy link<br>");
+		print ("<a href = index.php>".REFRESH_LABEL."</a><br>");
+		break;
 	}
-	print "</center>";
+	
+	if (!$isaction){
+		print ("Listwa gotowa !");
+	} 
 	
 	$stateByte = getGPIOstate();
-	print "stateByte = 0x".bin2hex($stateByte)."<br>";
-	$stateByteDec = hexdec(bin2hex($stateByte));  
+	print "<br>stateByte = 0x".bin2hex($stateByte)."<br>";
+	$stateByteDec = hexdec(bin2hex($stateByte));
+
+	print "</td></tr>";
+
+/*
 	//PIN1 info
 	if (checkIfBitSet($stateByteDec,PIN1_BIT))
 		print "1 is ON<br>";
@@ -71,42 +104,39 @@
 		print "4 is ON<br>";
 	else 
 		print "4 is OFF<br>";
-	    
-	    
+*/	
+
+			
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=turnon1>".CHANNEL1_LABEL."</a></td>";
+	
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=turnon2>".CHANNEL2_LABEL."</a></td></tr>";
+	
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=turnon3>".CHANNEL3_LABEL."</a></td>";
+	
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=turnon4>".CHANNEL4_LABEL."</a></td></tr>";
+	
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=turnonall>".ALL_ON_LABEL."</a></td>";
+	
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=turnoffall>".ALL_OFF_LABEL."</a></td></tr>";
+	
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=restart>".RESTART_LABEL."</a></td>";
+	
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php>".REFRESH_LABEL."</a></td></tr>";
+	
+	
+	} while (0);
+	
+	print "</td></tr></table>";
+	print "</center>";
+	
 	?>
-	 
-	 <table border = 0 cellspacing = 0 cellpadding = 0 width = 100%>
-		<tr >
-			<td height = 30 colspan=2>
-			&nbsp;
-	 		</td>
-		</tr>
-		<tr>
-			<td align=center height = 100 valign = middle>
-				<a href = index.php?action=turnon1>Włącz gniazdo 1</a><br><br>
-				<a href = index.php?action=turnoff1>Wyłącz gniazdo 1</a>
-			</td>
-			<td align=center height = 100 valign = middle>
-				<a href = index.php?action=turnon2>Włącz gniazdo 2</a><br><br>
-				<a href = index.php?action=turnoff2>Wyłącz gniazdo 2</a>
-			</td> 
-		</tr>
-		<tr>
-			<td align=center height = 100 valign = middle>
-				<a href = index.php?action=turnon3>Włącz gniazdo 3</a><br><br>
-				<a href = index.php?action=turnoff3>Wyłącz gniazdo 3</a>
-			</td>
-			<td align=center height = 100 valign = middle>
-				<a href = index.php?action=turnon4>Włącz gniazdo 4</a><br><br>
-				<a href = index.php?action=turnoff4>Wyłącz gniazdo 4</a>
-			</td> 
-		</tr>
-		<tr>
-			<td align=center height = 30 colspan=2>
-				<a href = index.php?action=turnonall>Włącz wszystkie</a><br><br>
-				<a href = index.php?action=turnoffall>Wyłącz wszystkie</a>
-	 		</td>
-		</tr>
-	 </table>
    </body>
 </html>
