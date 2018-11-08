@@ -26,6 +26,10 @@
 	define ('RESTART_LABEL','Zrestartuj<br>listwę');
 	define ('REFRESH_LABEL','Odświerz<br>interfejs');
 	define ('CELL_HEIGHT',100);	
+	define ('FONT_SIZE','5');	
+	define ('FONT_FACE','Helvetica');
+	define ('BG_ON_COL','#c3c3c3');
+	define ('BG_OFF_COL','white');
 		
 		
 	require(PHP_PATH.'functions.php'); 
@@ -34,7 +38,7 @@
 		
 	do {
 		print "<center>";
-		print "<table border = 1 cellspacing = 10 cellpadding = 10 width = 600>";
+		print "<table border = 1 cellspacing = 10 cellpadding = 10 width = 600 bordercolor=#e8e8e8>";
 		print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." colspan=2>";
 						
 		if(isset($_GET['action'])){
@@ -83,53 +87,60 @@
 
 	print "</td></tr>";
 
-/*
-	//PIN1 info
-	if (checkIfBitSet($stateByteDec,PIN1_BIT))
-		print "1 is ON<br>";
-	else 
-		print "1 is OFF<br>";
-	//PIN2 info
-	if (checkIfBitSet($stateByteDec,PIN2_BIT))
-		print "2 is ON<br>";
-	else 
-		print "2 is OFF<br>";
-	//PIN3 info
-	if (checkIfBitSet($stateByteDec,PIN3_BIT))
-		print "3 is ON<br>";
-	else 
-		print "3 is OFF<br>";
-	//PIN4 info
-	if (checkIfBitSet($stateByteDec,PIN4_BIT))
-		print "4 is ON<br>";
-	else 
-		print "4 is OFF<br>";
-*/	
+	$bg1col = BG_OFF_COL;
+	$bg2col = BG_OFF_COL;
+	$bg3col = BG_OFF_COL;
+	$bg4col = BG_OFF_COL;
+	
+	$action1 = GPIO_ON_COMMAND."1";
+	$action2 = GPIO_ON_COMMAND."2";
+	$action3 = GPIO_ON_COMMAND."3";
+	$action4 = GPIO_ON_COMMAND."4";
+	
+	if (checkIfBitSet($stateByteDec,PIN1_BIT)){
+		$bg1col = BG_ON_COL;
+		$action1 = GPIO_OFF_COMMAND."1";
+	}
+
+	if (checkIfBitSet($stateByteDec,PIN2_BIT)){
+		$bg2col = BG_ON_COL;
+		$action2 = GPIO_OFF_COMMAND."2";	
+	}
+
+	if (checkIfBitSet($stateByteDec,PIN3_BIT)){
+		$bg3col = BG_ON_COL;
+		$action3 = GPIO_OFF_COMMAND."3";
+	}
+
+	if (checkIfBitSet($stateByteDec,PIN4_BIT)){
+		$bg4col = BG_ON_COL;
+		$action4 = GPIO_OFF_COMMAND."4";
+	}
 
 			
-	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=turnon1>".CHANNEL1_LABEL."</a></td>";
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg1col.">";
+	print "<a href = index.php?action=".$action1."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL1_LABEL."</font></a></td>";
 	
-	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=turnon2>".CHANNEL2_LABEL."</a></td></tr>";
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg2col.">";
+	print "<a href = index.php?action=".$action2."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL2_LABEL."</font></a></td></tr>";
 	
-	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=turnon3>".CHANNEL3_LABEL."</a></td>";
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg3col.">";
+	print "<a href = index.php?action=".$action3."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL3_LABEL."</font></a></td>";
 	
-	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=turnon4>".CHANNEL4_LABEL."</a></td></tr>";
-	
-	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=turnonall>".ALL_ON_LABEL."</a></td>";
-	
-	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=turnoffall>".ALL_OFF_LABEL."</a></td></tr>";
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg4col.">";
+	print "<a href = index.php?action=".$action4."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL4_LABEL."</font></a></td></tr>";
 	
 	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=restart>".RESTART_LABEL."</a></td>";
+	print "<a href = index.php?action=turnonall><font size = ".FONT_SIZE." face = ".FONT_FACE.">".ALL_ON_LABEL."</font></a></td>";
 	
 	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php>".REFRESH_LABEL."</a></td></tr>";
+	print "<a href = index.php?action=turnoffall><font size = ".FONT_SIZE." face = ".FONT_FACE.">".ALL_OFF_LABEL."</font></a></td></tr>";
+	
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=restart><font size = ".FONT_SIZE." face = ".FONT_FACE.">".RESTART_LABEL."</font></a></td>";
+	
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php><font size = ".FONT_SIZE." face = ".FONT_FACE.">".REFRESH_LABEL."</font></a></td></tr>";
 	
 	
 	} while (0);
