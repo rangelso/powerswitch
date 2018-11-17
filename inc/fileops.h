@@ -7,5 +7,6 @@
 #define GPIO_STATE_FILE_SIZE (1)
 
 FunctionResult saveGPIOstate(unsigned char GPIOstate);
+FunctionResult loadGPIOstate(unsigned char *GPIOstate);
 
 #endif

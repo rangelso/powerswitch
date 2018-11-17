@@ -21,10 +21,11 @@
 #include <string.h>
 #include "fileops.h"
 
-#define PIN1 RPI_V2_GPIO_P1_07 //GPIO4
-#define PIN2 RPI_V2_GPIO_P1_15 //GPIO22
-#define PIN3 RPI_V2_GPIO_P1_29 //GPIO5
-#define PIN4 RPI_V2_GPIO_P1_37 //GPIO26
+//w parach 1-2 oraz 3-4 zamieniono piny
+#define PIN2 RPI_V2_GPIO_P1_07 //GPIO4
+#define PIN1 RPI_V2_GPIO_P1_15 //GPIO22
+#define PIN4 RPI_V2_GPIO_P1_29 //GPIO5
+#define PIN3 RPI_V2_GPIO_P1_37 //GPIO26
 
 #define PIN1_BIT (1)
 #define PIN2_BIT (2)
