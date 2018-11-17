@@ -7,6 +7,7 @@
 	
 	ini_set('error_reporting',E_ALL);
 	ini_set('display_errors',1);
+	define('HTML_PATH', '/var/www/html/shutdownscript');
 	define('PHP_PATH', '/var/www/html/php/');
 	define('GPIO_STATE_FILE_PATH', '/var/www/html/gpiostate');
 	define('GPIO_STATE_FILE_SIZE', 1);
@@ -23,7 +24,7 @@
 	define ('CHANNEL4_LABEL','LAMPA');
 	define ('ALL_ON_LABEL','Włącz<br>wszystkie');
 	define ('ALL_OFF_LABEL','Wyłącz<br>wszystkie');
-	define ('RESTART_LABEL','Zrestartuj<br>listwę');
+	define ('SHUTDOWN_LABEL','Wyłącz<br>listwę');
 	define ('REFRESH_LABEL','Odświerz<br>interfejs');
 	define ('CELL_HEIGHT',100);	
 	define ('FONT_SIZE','5');	
@@ -63,9 +64,13 @@
 				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."all");
 			} else if ($_GET['action']=="turnoffall") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."all");
-			} else if ($_GET['action']=="restart") {
-				$shutdown = shell_exec('shutdown -r now');
-				print $shutdown;
+			} else if ($_GET['action']=="shutdown") {
+				$shutdown = shell_exec('sudo shutdown -h -P now');
+				//print "shutdown=".$shutdown."<br>";
+				//system('sudo ./'.HTML_PATH);
+				$isrestart = 1;
+			} else if ($_GET['action']=="reboot") {
+				shell_exec('sudo shutdown -r now');
 				$isrestart = 1;
 			}
 		} 
@@ -137,7 +142,7 @@
 	print "<a href = index.php?action=turnoffall><font size = ".FONT_SIZE." face = ".FONT_FACE.">".ALL_OFF_LABEL."</font></a></td></tr>";
 	
 	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
-	print "<a href = index.php?action=restart><font size = ".FONT_SIZE." face = ".FONT_FACE.">".RESTART_LABEL."</font></a></td>";
+	print "<a href = index.php?action=shutdown><font size = ".FONT_SIZE." face = ".FONT_FACE.">".SHUTDOWN_LABEL."</font></a></td>";
 	
 	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
 	print "<a href = index.php><font size = ".FONT_SIZE." face = ".FONT_FACE.">".REFRESH_LABEL."</font></a></td></tr>";
