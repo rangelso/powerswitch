@@ -40,14 +40,17 @@ static void lcl_clearBit(unsigned char *byte, int bit){
 	(*byte) &= ~(1 << (bit-1));
 }
 
+
 int main(int argc, char *argv[]) {
 	// If you call this, it will not actually access the GPIO
 	// Use for testing
 //    bcm2835_set_debug(1);
 
+
 	unsigned char GPIOstate = 0;
 	unsigned char firstSave = 0;
 	unsigned char loadingError = 0;
+	char *msg = "Błąd !";
 
 	if (argc <= 1) {
 		printf("Function was called without args\n");
@@ -75,37 +78,45 @@ int main(int argc, char *argv[]) {
 	if (strcmp(argv[1], "turnon1") == 0) {
 		bcm2835_gpio_write(PIN1, HIGH);
 		lcl_setBit(&GPIOstate, PIN1_BIT);
+		msg = RETURN_MSG_TURNON1;
 
 	} else if (strcmp(argv[1], "turnoff1") == 0) {
 		bcm2835_gpio_write(PIN1, LOW);
 		lcl_clearBit(&GPIOstate, PIN1_BIT);
+		msg = RETURN_MSG_TURNOFF1;
 
 		//channel 2
 	} else if (strcmp(argv[1], "turnon2") == 0) {
 		bcm2835_gpio_write(PIN2, HIGH);
 		lcl_setBit(&GPIOstate, PIN2_BIT);
+		msg = RETURN_MSG_TURNON2;
 
 	} else if (strcmp(argv[1], "turnoff2") == 0) {
 		bcm2835_gpio_write(PIN2, LOW);
 		lcl_clearBit(&GPIOstate, PIN2_BIT);
+		msg = RETURN_MSG_TURNOFF2;
 
 		//channel 3
 	} else if (strcmp(argv[1], "turnon3") == 0) {
 		bcm2835_gpio_write(PIN3, HIGH);
 		lcl_setBit(&GPIOstate, PIN3_BIT);
+		msg = RETURN_MSG_TURNON3;
 
 	} else if (strcmp(argv[1], "turnoff3") == 0) {
 		bcm2835_gpio_write(PIN3, LOW);
 		lcl_clearBit(&GPIOstate, PIN3_BIT);
+		msg = RETURN_MSG_TURNOFF3;
 
 		//channel 4
 	} else if (strcmp(argv[1], "turnon4") == 0) {
 		bcm2835_gpio_write(PIN4, HIGH);
 		lcl_setBit(&GPIOstate, PIN4_BIT);
+		msg = RETURN_MSG_TURNON4;
 
 	} else if (strcmp(argv[1], "turnoff4") == 0) {
 		bcm2835_gpio_write(PIN4, LOW);
 		lcl_clearBit(&GPIOstate, PIN4_BIT);
+		msg = RETURN_MSG_TURNOFF4;
 
 		//channel 1-4
 	} else if (strcmp(argv[1], "turnonall") == 0) {
@@ -117,6 +128,7 @@ int main(int argc, char *argv[]) {
 		lcl_setBit(&GPIOstate, PIN2_BIT);
 		lcl_setBit(&GPIOstate, PIN3_BIT);
 		lcl_setBit(&GPIOstate, PIN4_BIT);
+		msg = RETURN_MSG_TURNONALL;
 
 	} else if (strcmp(argv[1], "turnoffall") == 0) {
 		bcm2835_gpio_write(PIN1, LOW);
@@ -127,6 +139,7 @@ int main(int argc, char *argv[]) {
 		lcl_clearBit(&GPIOstate, PIN2_BIT);
 		lcl_clearBit(&GPIOstate, PIN3_BIT);
 		lcl_clearBit(&GPIOstate, PIN4_BIT);
+		msg = RETURN_MSG_TURNOFFALL;
 
 		//start sequence
 	} else if (strcmp(argv[1], "start") == 0) {
@@ -156,7 +169,8 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-	printf("[%s] command sucessfully performed\n", argv[1]);
+
+	printf("[%s]\n", msg);
 
 	/*
 	 // wait a bit

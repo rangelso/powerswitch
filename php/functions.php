@@ -22,12 +22,6 @@ return $stateByte;
 function checkIfBitSet($statusByte, $bit){
 	$bit--;
 	
-	//print "statusByte = ".$statusByte."<br>";
-	//print "statusByte@1 = ".($statusByte & 1)."<br>";
-	//print "statusByte@2 = ".($statusByte & 2)."<br>";
-	//print "statusByte@2 = ".($statusByte & 4)."<br>";
-	//print "statusByte@2 = ".($statusByte & 8)."<br>";
-
 	if($statusByte & (1 << $bit)) { 
 		return 1;
 	} else {

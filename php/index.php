@@ -1,53 +1,34 @@
 <html>
  <head>
-  <title>Test diody</title>
+  <title>PANEL STEROWANIA POWERBOX@PI.4 DLA CHATA ANI</title>
  </head>
- <body>
+ <body bgcolor = #bdd4f9>
 	<?php
 	
 	ini_set('error_reporting',E_ALL);
 	ini_set('display_errors',1);
-	define('HTML_PATH', '/var/www/html/shutdownscript');
-	define('PHP_PATH', '/var/www/html/php/');
-	define('GPIO_STATE_FILE_PATH', '/var/www/html/gpiostate');
-	define('GPIO_STATE_FILE_SIZE', 1);
-	define('GPIO_APP_FILE_PATH', '/var/www/html/power-switch-x4');
-	define('GPIO_ON_COMMAND', 'turnon');
-	define('GPIO_OFF_COMMAND', 'turnoff');
-	define ('PIN1_BIT',1);
-	define ('PIN2_BIT',2);
-	define ('PIN3_BIT',3);
-	define ('PIN4_BIT',4);
-	define ('CHANNEL1_LABEL','PC');
-	define ('CHANNEL2_LABEL','TV');
-	define ('CHANNEL3_LABEL','');
-	define ('CHANNEL4_LABEL','LAMPA');
-	define ('ALL_ON_LABEL','Włącz<br>wszystkie');
-	define ('ALL_OFF_LABEL','Wyłącz<br>wszystkie');
-	define ('SHUTDOWN_LABEL','Wyłącz<br>listwę');
-	define ('REFRESH_LABEL','Odświerz<br>interfejs');
-	define ('CELL_HEIGHT',100);	
-	define ('FONT_SIZE','5');	
-	define ('FONT_FACE','Helvetica');
-	define ('BG_ON_COL','#c3c3c3');
-	define ('BG_OFF_COL','white');
-		
-		
+			
+	define('HTML_PATH', '/var/www/html/');
+	define('PHP_PATH', HTML_PATH.'php/');
+	require(PHP_PATH.'config.php'); 	
 	require(PHP_PATH.'functions.php'); 
 	$isrestart = 0;
 	$isaction = 0;
 		
 	do {
 		print "<center>";
-		print "<table border = 1 cellspacing = 10 cellpadding = 10 width = 600 bordercolor=#e8e8e8>";
+		print "<table border = 1 cellspacing = 10 cellpadding = 10 width = 800 bordercolor=#c3c3c3 bgcolor=white>";
 		print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." colspan=2>";
+		print "<font size = 2 face = ".FONT_FACE.">";
 						
 		if(isset($_GET['action'])){
 			$isaction = 1;
 			if ($_GET['action']=="turnon1") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1");
+				print "path = ".GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1<br>";
 			} else if ($_GET['action']=="turnoff1") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1");
+				print "path = ".GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1<br>";
 			} else if ($_GET['action']=="turnon2") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."2");
 			} else if ($_GET['action']=="turnoff2") {
@@ -66,31 +47,44 @@
 				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."all");
 			} else if ($_GET['action']=="shutdown") {
 				$shutdown = shell_exec('sudo shutdown -h -P now');
-				//print "shutdown=".$shutdown."<br>";
-				//system('sudo ./'.HTML_PATH);
 				$isrestart = 1;
 			} else if ($_GET['action']=="reboot") {
-				shell_exec('sudo shutdown -r now');
+				$shutdown = shell_exec('sudo reboot');
 				$isrestart = 1;
 			}
 		} 
 	
 		
+	/*	
 	if ($isrestart) {
 		print ("Odczekaj minutę a następnie odświerz <br>interfejs klikając w poniższy link<br>");
 		print ("<a href = index.php>".REFRESH_LABEL."</a><br>");
 		break;
 	}
+	*/
 	
 	if (!$isaction){
 		print ("Listwa gotowa !");
 	} 
 	
+	
 	$stateByte = getGPIOstate();
 	print "<br>stateByte = 0x".bin2hex($stateByte)."<br>";
+	/*
+	print "active1 = ".$active1."<br>";
+	print "active2 = ".$active2."<br>";
+	print "active3 = ".$active3."<br>";
+	print "active4 = ".$active4."<br>";
+	*/
+	print "</font>";
+	print "</td></tr>";
+
 	$stateByteDec = hexdec(bin2hex($stateByte));
 
-	print "</td></tr>";
+	$active1 = strlen(CHANNEL1_LABEL);
+	$active2 = strlen(CHANNEL2_LABEL);
+	$active3 = strlen(CHANNEL3_LABEL);
+	$active4 = strlen(CHANNEL4_LABEL);
 
 	$bg1col = BG_OFF_COL;
 	$bg2col = BG_OFF_COL;
@@ -103,22 +97,22 @@
 	$action4 = GPIO_ON_COMMAND."4";
 	
 	if (checkIfBitSet($stateByteDec,PIN1_BIT)){
-		$bg1col = BG_ON_COL;
+		$bg1col = ($active1) ? BG_ON_COL : BG_OFF_COL;
 		$action1 = GPIO_OFF_COMMAND."1";
 	}
 
 	if (checkIfBitSet($stateByteDec,PIN2_BIT)){
-		$bg2col = BG_ON_COL;
+		$bg2col = ($active2) ? BG_ON_COL : BG_OFF_COL;
 		$action2 = GPIO_OFF_COMMAND."2";	
 	}
 
 	if (checkIfBitSet($stateByteDec,PIN3_BIT)){
-		$bg3col = BG_ON_COL;
+		$bg3col = ($active3) ? BG_ON_COL : BG_OFF_COL;
 		$action3 = GPIO_OFF_COMMAND."3";
 	}
 
 	if (checkIfBitSet($stateByteDec,PIN4_BIT)){
-		$bg4col = BG_ON_COL;
+		$bg4col = ($active4) ? BG_ON_COL : BG_OFF_COL;
 		$action4 = GPIO_OFF_COMMAND."4";
 	}
 
@@ -145,7 +139,11 @@
 	print "<a href = index.php?action=shutdown><font size = ".FONT_SIZE." face = ".FONT_FACE.">".SHUTDOWN_LABEL."</font></a></td>";
 	
 	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<a href = index.php?action=reboot><font size = ".FONT_SIZE." face = ".FONT_FACE.">".REBOOT_LABEL."</font></a></td></tr>";
+
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." colspan = 2>";
 	print "<a href = index.php><font size = ".FONT_SIZE." face = ".FONT_FACE.">".REFRESH_LABEL."</font></a></td></tr>";
+
 	
 	
 	} while (0);
