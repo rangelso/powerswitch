@@ -2,7 +2,19 @@
  <head>
   <title>PANEL STEROWANIA POWERBOX@PI.4 DLA CHATA ANI</title>
  </head>
- <body bgcolor = #bdd4f9>
+ <body background = img/blue.jpg>
+	<script language =javascript>
+	function getAction(action){
+		document.actionform.action = "index.php?action="+action;
+		document.actionform.submit();
+	}
+	
+	function postAction(){
+		document.actionform.submit();
+	}
+	</script>
+	
+	
 	<?php
 	
 	ini_set('error_reporting',E_ALL);
@@ -16,19 +28,18 @@
 	$isaction = 0;
 		
 	do {
+		print "<form name = actionform action = index.php method = post>";
 		print "<center>";
-		print "<table border = 1 cellspacing = 10 cellpadding = 10 width = 800 bordercolor=#c3c3c3 bgcolor=white>";
-		print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." colspan=2>";
-		print "<font size = 2 face = ".FONT_FACE.">";
+		print "<table border = 1 cellspacing = 5 cellpadding = 5 width = 800>";
+		print "<tr><td align = center valign = middle colspan=2 height = 50 bgcolor=".BG_OFF_COL.">";
+		print "<font size = 2 face = ".FONT_FACE." color=black>";
 						
-		if(isset($_GET['action'])){
+		if(isset($_POST['action'])){
 			$isaction = 1;
-			if ($_GET['action']=="turnon1") {
+			if ($_POST['action']=="turnon1") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1");
-				print "path = ".GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."1<br>";
-			} else if ($_GET['action']=="turnoff1") {
+			} else if ($_POST['action']=="turnoff1") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1");
-				print "path = ".GPIO_APP_FILE_PATH." ".GPIO_OFF_COMMAND."1<br>";
 			} else if ($_GET['action']=="turnon2") {
 				system(GPIO_APP_FILE_PATH." ".GPIO_ON_COMMAND."2");
 			} else if ($_GET['action']=="turnoff2") {
@@ -69,13 +80,7 @@
 	
 	
 	$stateByte = getGPIOstate();
-	print "<br>stateByte = 0x".bin2hex($stateByte)."<br>";
-	/*
-	print "active1 = ".$active1."<br>";
-	print "active2 = ".$active2."<br>";
-	print "active3 = ".$active3."<br>";
-	print "active4 = ".$active4."<br>";
-	*/
+	//print "<br>stateByte = 0x".bin2hex($stateByte)."<br>";
 	print "</font>";
 	print "</td></tr>";
 
@@ -118,30 +123,34 @@
 
 			
 	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg1col.">";
-	print "<a href = index.php?action=".$action1."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL1_LABEL."</font></a></td>";
-	
+	//print "<a href = index.php?action=".$action1."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL1_LABEL."</font></a></td>";
+	print "<input type = hidden name = action value = ".$action1.">";
+	//print "<a href = javascript:postAction(&quot;".$action1."&quot;)><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL1_LABEL."</font></a></td>";
+	print "<a href = javascript:postAction()><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL1_LABEL."</font></a></td>";
+		
 	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg2col.">";
-	print "<a href = index.php?action=".$action2."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL2_LABEL."</font></a></td></tr>";
-	
+	//print "<a href = index.php?action=".$action2."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL2_LABEL."</font></a></td></tr>";
+	print "<a href = javascript:postAction(&quot;".$action2."&quot;)><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL2_LABEL."</font></a></td>";
+		
 	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg3col.">";
 	print "<a href = index.php?action=".$action3."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL3_LABEL."</font></a></td>";
 	
 	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".$bg4col.">";
 	print "<a href = index.php?action=".$action4."><font size = ".FONT_SIZE." face = ".FONT_FACE.">".CHANNEL4_LABEL."</font></a></td></tr>";
 	
-	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".BG_OFF_COL.">";
 	print "<a href = index.php?action=turnonall><font size = ".FONT_SIZE." face = ".FONT_FACE.">".ALL_ON_LABEL."</font></a></td>";
 	
-	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".BG_OFF_COL.">";
 	print "<a href = index.php?action=turnoffall><font size = ".FONT_SIZE." face = ".FONT_FACE.">".ALL_OFF_LABEL."</font></a></td></tr>";
 	
-	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<tr><td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".BG_OFF_COL.">";
 	print "<a href = index.php?action=shutdown><font size = ".FONT_SIZE." face = ".FONT_FACE.">".SHUTDOWN_LABEL."</font></a></td>";
 	
-	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50%>";
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." width = 50% bgcolor=".BG_OFF_COL.">";
 	print "<a href = index.php?action=reboot><font size = ".FONT_SIZE." face = ".FONT_FACE.">".REBOOT_LABEL."</font></a></td></tr>";
 
-	print "<td align = center valign = middle height = ".CELL_HEIGHT." colspan = 2>";
+	print "<td align = center valign = middle height = ".CELL_HEIGHT." colspan = 2 bgcolor=".BG_OFF_COL.">";
 	print "<a href = index.php><font size = ".FONT_SIZE." face = ".FONT_FACE.">".REFRESH_LABEL."</font></a></td></tr>";
 
 	
@@ -150,7 +159,7 @@
 	
 	print "</td></tr></table>";
 	print "</center>";
-	
+	print "</form>";
 	?>
    </body>
 </html>
