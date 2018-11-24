@@ -9,8 +9,8 @@
 	define ('PIN2_BIT',2);
 	define ('PIN3_BIT',3);
 	define ('PIN4_BIT',4);
-	define ('CHANNEL1_LABEL','PC (1)');
-	define ('CHANNEL2_LABEL','TV (2)');
+	define ('CHANNEL1_LABEL','TV (1)');
+	define ('CHANNEL2_LABEL','PC (2)');
 	define ('CHANNEL3_LABEL','(3)');
 	define ('CHANNEL4_LABEL','LAMPA (4)');
 	define ('ALL_ON_LABEL','WŁĄCZ<br>WSZYSTKIE');

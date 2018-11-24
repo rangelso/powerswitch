@@ -21,9 +21,9 @@
 #include <string.h>
 #include "fileops.h"
 
-//w parach 1-2 oraz 3-4 zamieniono piny
-#define PIN2 RPI_V2_GPIO_P1_07 //GPIO4
-#define PIN1 RPI_V2_GPIO_P1_15 //GPIO22
+//w parze 3-4 zamieniono piny
+#define PIN1 RPI_V2_GPIO_P1_07 //GPIO4
+#define PIN2 RPI_V2_GPIO_P1_15 //GPIO22
 #define PIN4 RPI_V2_GPIO_P1_29 //GPIO5
 #define PIN3 RPI_V2_GPIO_P1_37 //GPIO26
 
@@ -121,8 +121,11 @@ int main(int argc, char *argv[]) {
 		//channel 1-4
 	} else if (strcmp(argv[1], "turnonall") == 0) {
 		bcm2835_gpio_write(PIN1, HIGH);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN2, HIGH);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN3, HIGH);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN4, HIGH);
 		lcl_setBit(&GPIOstate, PIN1_BIT);
 		lcl_setBit(&GPIOstate, PIN2_BIT);
@@ -132,8 +135,11 @@ int main(int argc, char *argv[]) {
 
 	} else if (strcmp(argv[1], "turnoffall") == 0) {
 		bcm2835_gpio_write(PIN1, LOW);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN2, LOW);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN3, LOW);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN4, LOW);
 		lcl_clearBit(&GPIOstate, PIN1_BIT);
 		lcl_clearBit(&GPIOstate, PIN2_BIT);
@@ -143,10 +149,13 @@ int main(int argc, char *argv[]) {
 
 		//start sequence
 	} else if (strcmp(argv[1], "start") == 0) {
-		bcm2835_delay(5000);
+		bcm2835_delay(3000);
 		bcm2835_gpio_write(PIN1, HIGH);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN2, HIGH);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN3, HIGH);
+		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN4, HIGH);
 		lcl_setBit(&GPIOstate, PIN1_BIT);
 		lcl_setBit(&GPIOstate, PIN2_BIT);
@@ -169,14 +178,7 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-
 	printf("[%s]\n", msg);
-
-	/*
-	 // wait a bit
-	 bcm2835_delay(500);
-	 }
-	 */
 
 	bcm2835_close();
 
