@@ -54,9 +54,9 @@
 	do {
 		
 		print "<center>";
-		print "<table border = 1 cellspacing = 5 cellpadding = 5 width = 800>";
+		print "<table border = 5 cellspacing = 5 cellpadding = 5 width = 800>";
 		print "<tr><td align = center valign = middle colspan=2 height = 50 bgcolor=".BG_OFF_COL.">";
-		print "<font size = 2 face = ".FONT_FACE." color=black>";
+		print "<font size = 4 face = ".FONT_FACE." color=black>";
 						
 		if(isset($_POST['action'])){
 			$isaction = 1;
