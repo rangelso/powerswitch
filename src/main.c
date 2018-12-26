@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 
 		//start sequence
 	} else if (strcmp(argv[1], "start") == 0) {
-		bcm2835_delay(3000);
+		bcm2835_delay(1500);
 		bcm2835_gpio_write(PIN1, HIGH);
 		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN2, HIGH);
@@ -157,11 +157,26 @@ int main(int argc, char *argv[]) {
 		bcm2835_gpio_write(PIN3, HIGH);
 		bcm2835_delay(250);
 		bcm2835_gpio_write(PIN4, HIGH);
+		bcm2835_delay(1500);
 		lcl_setBit(&GPIOstate, PIN1_BIT);
 		lcl_setBit(&GPIOstate, PIN2_BIT);
 		lcl_setBit(&GPIOstate, PIN3_BIT);
 		lcl_setBit(&GPIOstate, PIN4_BIT);
 		firstSave = 1;
+
+	} else if (strcmp(argv[1], "stop") == 0) {
+		bcm2835_gpio_write(PIN1, LOW);
+		bcm2835_delay(250);
+		bcm2835_gpio_write(PIN2, LOW);
+		bcm2835_delay(250);
+		bcm2835_gpio_write(PIN3, LOW);
+		bcm2835_delay(250);
+		bcm2835_gpio_write(PIN4, LOW);
+		bcm2835_delay(250);
+		lcl_clearBit(&GPIOstate, PIN1_BIT);
+		lcl_clearBit(&GPIOstate, PIN2_BIT);
+		lcl_clearBit(&GPIOstate, PIN3_BIT);
+		lcl_clearBit(&GPIOstate, PIN4_BIT);
 
 	} else {
 		printf("Trying to run with wrong command = [%s]\n", argv[1]);
