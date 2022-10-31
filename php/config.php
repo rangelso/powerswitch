@@ -11,8 +11,8 @@
 	define ('PIN4_BIT',4);
 	define ('CHANNEL1_LABEL','TV<br>TUNER<br>X-BOX');
 	define ('CHANNEL2_LABEL','PC<BR>MONITOR');
-	define ('CHANNEL3_LABEL','CHOINKA');
-	define ('CHANNEL4_LABEL','LAMPA');
+	define ('CHANNEL3_LABEL','FOTEL LEWA');
+	define ('CHANNEL4_LABEL','FOTEL PRAWA');
 	define ('ALL_ON_LABEL','WŁĄCZ<br>WSZYSTKIE');
 	define ('ALL_OFF_LABEL','WYŁĄCZ<br>WSZYSTKIE');
 	define ('SHUTDOWN_LABEL','WYŁĄCZ<br>LISTWĘ');
